@@ -38,6 +38,10 @@ function draw() {
   // background(0, 0, 0, 0.1)
   background(0, 0, 0, 1)
   env.draw()
+
+  if (env.agents.length === 1) {
+    noLoop()
+  }
 }
 
 class Environnement {
