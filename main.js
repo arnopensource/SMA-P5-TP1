@@ -4,10 +4,11 @@ const DRAW_TOGGLE = false
 const DRAW_DIR = false
 const CAN_EAT_THRESHOLD = 10
 const COLLISION_THRESHOLD = 1
+const EAT_GROW_PERCENTAGE = 0.5
 
-const NB_AGENTS = 15
+const NB_AGENTS = 10
 const NB_OBSTACLES = 3
-const NB_CREEPS = 1000
+const NB_CREEPS = 500
 
 let env
 
@@ -118,7 +119,7 @@ class Environnement {
         let collision = agent.body.collide(other.body)
         if (collision > COLLISION_THRESHOLD) {
           if (agent.body.size > other.body.size + CAN_EAT_THRESHOLD) {
-            agent.body.size += other.body.size
+            agent.body.size += other.body.size * EAT_GROW_PERCENTAGE
             return false
           } else if (agent.body.size >= other.body.size - CAN_EAT_THRESHOLD) {
             agent.body.vitesse.reflect(p5.Vector.sub(other.body.position, agent.body.position))
@@ -162,13 +163,13 @@ class Agent {
         if (this.body.size > body.size + CAN_EAT_THRESHOLD) {
           orders.eat.push({
             dir: d.normalize(),
-            weight: body.size,
+            weight: body.size * EAT_GROW_PERCENTAGE,
             dist: d.mag(),
           })
         } else if (this.body.size <= body.size - CAN_EAT_THRESHOLD) {
           orders.flee.push({
             dir: d.normalize(),
-            weight: body.size,
+            weight: 1,
             dist: d.mag(),
           })
         }
@@ -295,10 +296,6 @@ class Fustrum {
 
   push(body) {
     this.perceptionList.push(body)
-  }
-
-  draw(color) {
-
   }
 }
 
