@@ -87,15 +87,23 @@ class Environnement {
   applyDecision() {
     for (let agent of this.agents) {
       agent.body.update()
-
-      if (agent.body.position.x < 0) {
-        agent.body.position.x = this.largeur
-      } else if (agent.body.position.y < 0) {
-        agent.body.position.y = this.hauteur
-      } else if (agent.body.position.x > this.largeur) {
-        agent.body.position.x = 0
-      } else if (agent.body.position.y > this.hauteur) {
-        agent.body.position.y = 0
+     
+      if (agent.body.position.x < agent.body.size) {
+        if (cos(agent.body.vitesse.heading()) < 0) {
+          agent.body.vitesse.reflect(createVector(1, 0))
+        }
+      } else if (agent.body.position.y < agent.body.size) {
+        if (sin(agent.body.vitesse.heading()) < 0) {
+          agent.body.vitesse.reflect(createVector(0, 1))
+        }
+      } else if (agent.body.position.x > this.largeur - agent.body.size) {
+        if (cos(agent.body.vitesse.heading()) > 0) {
+          agent.body.vitesse.reflect(createVector(-1, 0))
+        }
+      } else if (agent.body.position.y > this.hauteur - agent.body.size) {
+        if (sin(agent.body.vitesse.heading()) > 0) {
+          agent.body.vitesse.reflect(createVector(0, -1))
+        }
       }
 
       for (let obstacle of this.obstacles) {
